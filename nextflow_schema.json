@@ -54,7 +54,7 @@
                 "nextclade": {
                     "type": "string",
                     "title": "Specify the name or path to Nextclade dataset.",
-                    "description": "Run Nextclade for clade assignment, mutation calling, and sequence quality checks for genome consensus sequence. Name of Nextclade dataset to retrieve (eg: sars-cov-2) or path to predownloaded Nextclade dataset. A list of available datasets can be obtained using the 'nextclade dataset list' command.",
+                    "description": "Run Nextclade. Specify either the dataset name (eg: sars-cov-2) which will be downloaded or a path to the dataset.",
                     "fa_icon": "fas fa-project-diagram"
                 },
                 "nextclade_tag":{
