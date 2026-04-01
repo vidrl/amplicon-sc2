@@ -698,7 +698,6 @@ def render_qc_report(
 def amplicon_depth_heatmap(
     amplicon_depths: pd.DataFrame, scheme_str: str, chrom_name: str
 ) -> str:
-
     # Hovertemplate string
     # if include_seqs:
     #     hovertemplatestr = "%{text}<br>" + "<b>Mismatches: %{z}</b><br>"
@@ -1112,6 +1111,31 @@ for tsv_path in amp_depth_tsvs:
         if len(rows) > 0
         else len(primer_pairs)
     )
+
+# nextclade parsing tsv
+for tsv in glob("nextclade_tsv/*.tsv"):
+    with open(tsv, "r") as file:
+        for row in csv.DictReader(file, delimiter="	"):
+            sample_name = row.get("seqName", "").split(" ")[0]
+            payload["nextclade_table"][sample_name] = {
+                "qc_status": row.get("qc.overallStatus", ""),
+                "qc_score": row.get("qc.overallScore", ""),
+                "clade": row.get("clade_display", ""),
+                "lineage": row.get("Nextclade_pango", ""),
+                "qc_missing_status": row.get("qc.missingData.status", ""),
+                "qc_mixedsites_status": row.get("qc.mixedSites.status", ""),
+                "qc_privatemut_status": row.get("qc.privateMutations.status", ""),
+                "qc_snpclust_status": row.get("qc.snpClusters.status", ""),
+                "qc_framshift_status": row.get("qc.frameShifts.status", ""),
+                "qc_stopcodon_status": row.get("qc.stopCodons.status", ""),
+            }
+
+payload["nextclade_table"] = dict(
+    sorted(
+        payload["nextclade_table"].items(),
+        key=lambda item: item[0],
+    )
+)
 
 for row in scheme_samplesheet_df.itertuples():
     if not payload["qc_table_info"].get(row.sample):
