@@ -10,8 +10,7 @@ process GENERATE_RUN_REPORT {
     input:
     tuple val(meta),
       path(bed),
-      path(depth_tsvs,
-      stageAs: "depth_tsvs/*"),
+      path(depth_tsvs, stageAs: "depth_tsvs/*"),
       path(amp_depth_tsvs, stageAs: "amplicon_depth_tsvs/*"),
       path(coverage_tsvs, stageAs: "coverage_tsvs/*"),
       path(msas, stageAs: "msas/*"),
