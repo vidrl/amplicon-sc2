@@ -363,9 +363,9 @@ workflow AMPLICON_NF {
         .join(ch_coverage_tsvs_by_scheme)
         // optional
         .join(ch_msas_opt, remainder: true)
+        .join(ch_nextclade_opt, remainder: true)
         .join(ch_wf_artic_bed_opt, remainder: true)
         .join(ch_wf_artic_summary_opt, remainder: true)
-        .join(ch_nextclade_opt, remainder: true)
         .map { meta, bed, depth, amp, cov, msas, nc, wfabed, wfasum ->
             [
                 meta,
