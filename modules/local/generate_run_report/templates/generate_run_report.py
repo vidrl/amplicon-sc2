@@ -174,7 +174,6 @@ def wf_coverage_plots(
             df = pd.read_csv(bed_path, sep="\t")
     except Exception:
         raise ValueError(f"Error loading bed file {bed_path}; check format")
-    print(df)
     df["pos"] = (df["start"] + df["end"]) / 2
 
     samples = sorted(df["sample"].unique())
