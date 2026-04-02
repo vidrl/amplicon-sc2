@@ -167,7 +167,6 @@ def wf_coverage_plots(
     """
     Returns a single Plotly Figure containing the grid of coverage plots.
     """
-
     cols = ["chrome", "start", "end", "depth", "pool", "sample"]
     try:
         df = pd.read_csv(bed_path, sep="\t", header=None, names=cols)
@@ -175,7 +174,7 @@ def wf_coverage_plots(
             df = pd.read_csv(bed_path, sep="\t")
     except Exception:
         raise ValueError(f"Error loading bed file {bed_path}; check format")
-
+    print(df)
     df["pos"] = (df["start"] + df["end"]) / 2
 
     samples = sorted(df["sample"].unique())
@@ -1000,6 +999,7 @@ payload = {
     "qc_table_info": {},
     "single_plots": [],
     "nested_plots": [],
+    "nextclade_table": {},
     "wf_summary_plots": [],
     "wf_cov_plots": [],
 }
