@@ -9,13 +9,16 @@ process GENERATE_RUN_REPORT {
 
     input:
     tuple val(meta),
-        path(bed),
-        path(depth_tsvs, stageAs: "depth_tsvs/*"),
-        path(amp_depth_tsvs, stageAs: "amplicon_depth_tsvs/*"),
-        path(coverage_tsvs, stageAs: "coverage_tsvs/*"),
-        path(msas, stageAs: "msas/*"),
-        path(nextclade, stageAs: "nextclade_tsv/*"),
-        path(samplesheet_csv)
+      path(bed),
+      path(depth_tsvs,
+      stageAs: "depth_tsvs/*"),
+      path(amp_depth_tsvs, stageAs: "amplicon_depth_tsvs/*"),
+      path(coverage_tsvs, stageAs: "coverage_tsvs/*"),
+      path(msas, stageAs: "msas/*"),
+      path(nextclade, stageAs: "nextclade_tsv/*"),
+      path(wfabed, stageAs: "wf-plots-bed.tsv"),
+      path(wfasum, stageAs: "wf-plots-summary.tsv"),
+      path(samplesheet_csv)
     path report_template
     path artic_logo_svg
     path bootstrap_bundle_min_js

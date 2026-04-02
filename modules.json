@@ -46,6 +46,11 @@
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
+                    "csvtk/concat": {
+                        "branch": "master",
+                        "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
+                        "installed_by": ["modules"]
+                    },
                     "freebayes": {
                         "branch": "master",
                         "git_sha": "d04951ee68e3e8b875ebf5ddb7ba6e05233624c1",
@@ -54,6 +59,11 @@
                     "mafft/align": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
+                    "mosdepth": {
+                        "branch": "master",
+                        "git_sha": "6832b69ef7f98c54876d6436360b6b945370c615",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
@@ -96,6 +106,11 @@
                     "samtools/sort": {
                         "branch": "master",
                         "git_sha": "e89ff68a46b848c4d8aabb8569767516d46db319",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/view": {
+                        "branch": "master",
+                        "git_sha": "b2e78932ef01165fd85829513eaca29eff8e640a",
                         "installed_by": ["modules"]
                     },
                     "seqkit/grep": {
