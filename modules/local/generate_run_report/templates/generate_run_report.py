@@ -93,6 +93,8 @@ def wf_summary_plots(fastcat_per_read_file):
 
     def _bar_plotly(df_in, sample_col, title):
         df_in = df_in[df_in[sample_col] != "Unknown"]
+        # josh add a line to fix mutiple types of sample id
+        df_in[sample_col] = df_in[sample_col].astype(str)
         counts = (
             df_in.groupby(sample_col)
             .size()
