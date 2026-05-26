@@ -823,18 +823,9 @@ for tsv_path in amp_depth_tsvs:
 
         amplicon_depth_rows.extend(rows)
 
+        covered = {(y["chrom"], y["amplicon"]) for y in rows}
         for x in primer_pairs:
-            if (
-                len(
-                    [
-                        y
-                        for y in amplicon_depth_rows
-                        if y["chrom"] == str(x.chrom)
-                        and y["amplicon"] == x.amplicon_number
-                    ]
-                )
-                == 0
-            ):
+            if (str(x.chrom), x.amplicon_number) not in covered:
                 amplicon_depth_rows.append(
                     {
                         "sample": sample_name,
@@ -856,6 +847,8 @@ for tsv_path in amp_depth_tsvs:
         else len(primer_pairs)
     )
 
+samples_with_amp_depths = {row["sample"] for row in amplicon_depth_rows}
+
 for row in scheme_samplesheet_df.itertuples():
     if not payload["qc_table_info"].get(row.sample):
         samples.add(row.sample)
@@ -867,7 +860,7 @@ for row in scheme_samplesheet_df.itertuples():
         payload["qc_table_info"][row.sample]["total_amp_dropouts"] = len(primer_pairs)
         payload["qc_table_info"][row.sample]["qc_result"] = "fail"
 
-    if len([x for x in amplicon_depth_rows if x["sample"] == row.sample]) == 0:
+    if row.sample not in samples_with_amp_depths:
         for x in primer_pairs:
             amplicon_depth_rows.append(
                 {
