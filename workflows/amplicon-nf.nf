@@ -11,7 +11,7 @@ include { methodsDescriptionText                    } from '../subworkflows/loca
 
 include { ONT_ASSEMBLY                              } from '../subworkflows/local/ont_assembly/main'
 include { ILLUMINA_ASSEMBLY                         } from '../subworkflows/local/illumina_assembly/main'
-include { RUN_NEXTCLADE                             } from '../subworkflows/local/run_nextclade'
+include { RUN_NEXTCLADE                             } from '../subworkflows/local/run_nextclade/main'
 
 include { SAMTOOLS_DEPTH                            } from '../modules/nf-core/samtools/depth/main'
 include { SAMTOOLS_COVERAGE                         } from '../modules/nf-core/samtools/coverage/main'
@@ -20,8 +20,8 @@ include { SEQKIT_REPLACE as SEQKIT_REPLACE_ILLUMINA } from '../modules/nf-core/s
 include { MAFFT_ALIGN                               } from '../modules/nf-core/mafft/align/main'
 include { SEQKIT_GREP as SEQKIT_GREP_FASTAS         } from '../modules/nf-core/seqkit/grep/main'
 include { SEQKIT_GREP as SEQKIT_GREP_REFS           } from '../modules/nf-core/seqkit/grep/main'
+include { WF_AMPLICON_DEPTHS                        } from "../subworkflows/local/wf_amplicon_depths/main"
 include { FIND_CONCATENATE                          } from '../modules/nf-core/find/concatenate/main'
-
 include { GENERATE_SAMPLE_REPORT                    } from '../modules/local/generate_sample_report/main'
 include { GENERATE_RUN_REPORT                       } from '../modules/local/generate_run_report/main'
 
@@ -198,6 +198,21 @@ workflow AMPLICON_NF {
         ILLUMINA_ASSEMBLY.out.amplicon_depths
     )
 
+    // wf-artic style plots
+    if (params.wf_artic_plots) {
+        WF_AMPLICON_DEPTHS(
+            ch_nanopore_input,
+            ONT_ASSEMBLY.out.primertrimmed_normalised_bam,
+            params.primer_pool_names,
+            params.mean_window_size
+            )
+        ch_wf_plots_bed_scheme = WF_AMPLICON_DEPTHS.out.bed
+            .map {meta, tsv -> [meta.subMap("scheme", "custom_scheme", "custom_scheme_name"), tsv]}
+        ch_wf_plots_summary_scheme = WF_AMPLICON_DEPTHS.out.read_summary
+            .map {meta, tsv -> [meta.subMap("scheme", "custom_scheme", "custom_scheme_name"), tsv]}
+    }
+
+
     SAMTOOLS_COVERAGE(ch_primertrimmed_bam, [[:], [], []])
 
     SAMTOOLS_DEPTH(ch_primertrimmed_bam, [[:], []])
@@ -319,9 +334,11 @@ workflow AMPLICON_NF {
     samplesheet_csv = file("${params.input}", checkIfExists: true)
 
     // massage optional inputs
-    ch_msas_opt       = params.primer_mismatch_plot ? ch_msas_by_scheme : channel.empty()
+    ch_msas_opt = params.primer_mismatch_plot ? ch_msas_by_scheme : channel.empty()
+    ch_wf_artic_bed_opt = params.wf_artic_plots ? ch_wf_plots_bed_scheme : channel.empty()
+    ch_wf_artic_summary_opt = params.wf_artic_plots ? ch_wf_plots_summary_scheme : channel.empty()
     ch_nextclade_opt  = params.nextclade ? ch_nextclade_tsv :  channel.empty()
-    
+
     ch_run_report_input = ch_bed_by_scheme
         // required
         .join(ch_depth_tsvs_by_scheme)
@@ -330,7 +347,9 @@ workflow AMPLICON_NF {
         // optional
         .join(ch_msas_opt, remainder: true)
         .join(ch_nextclade_opt, remainder: true)
-        .map { meta, bed, depth, amp, cov, msas, nc ->
+        .join(ch_wf_artic_bed_opt, remainder: true)
+        .join(ch_wf_artic_summary_opt, remainder: true)
+        .map { meta, bed, depth, amp, cov, msas, nc, wfabed, wfasum ->
             [
                 meta,
                 bed,
@@ -339,10 +358,12 @@ workflow AMPLICON_NF {
                 cov,
                 msas ?: [],
                 nc ?: [],
+                wfabed ?: [],
+                wfasum ?: [],
                 samplesheet_csv
             ]
         }
-
+   
     GENERATE_RUN_REPORT(
         ch_run_report_input,
         run_report_template,

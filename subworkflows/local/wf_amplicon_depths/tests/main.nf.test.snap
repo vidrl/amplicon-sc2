@@ -1,0 +1,44 @@
+{
+    "test - ont": {
+        "content": [
+            null,
+            [
+                "versions.yml:md5,254425799c742d4a3e559a5052abfb66",
+                "versions.yml:md5,7588322f858cd7b25843af8a28a012cb",
+                "versions.yml:md5,7588322f858cd7b25843af8a28a012cb",
+                "versions.yml:md5,bd05e6796061d606c64df61d7d968f5c",
+                "versions.yml:md5,bd05e6796061d606c64df61d7d968f5c"
+            ],
+            {
+                "WF_AMPLICON_DEPTHS:CONCAT_SUMMARY": {
+                    "csvtk": "0.31.0"
+                }
+            }
+        ],
+        "timestamp": "2026-03-05T18:36:26.426536",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.2"
+        }
+    },
+    "test - illumina": {
+        "content": [
+            null,
+            [
+                "versions.yml:md5,9d919b7c2ea0b8209b49a754dd9b89a5",
+                "versions.yml:md5,9d919b7c2ea0b8209b49a754dd9b89a5",
+                "versions.yml:md5,9f3afba01b06f9ffc98dcc7b167d8d56"
+            ],
+            {
+                "AMPLICON_DEPTHS:FASTCAT": {
+                    "fastcat": "0.24.2)"
+                }
+            }
+        ],
+        "timestamp": "2026-02-22T00:48:59.532643",
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        }
+    }
+}
