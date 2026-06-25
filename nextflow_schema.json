@@ -63,18 +63,6 @@
                     "description": "Version tag of the dataset to download. If not specified, Nextclade will retrieve the latest version.",
                     "fa_icon": "fas fa-project-diagram"
                 },
-                "nextclade": {
-                    "type": "string",
-                    "title": "Specify the name or path to Nextclade dataset.",
-                    "description": "Run Nextclade. Specify either the dataset name (eg: sars-cov-2) which will be downloaded or a path to the dataset.",
-                    "fa_icon": "fas fa-project-diagram"
-                },
-                "nextclade_tag":{
-                    "type": "string",
-                    "title": "Nextclade dataset tag.",
-                    "description": "Version tag of the dataset to download. If not specified, Nextclade will retrieve the latest version.",
-                    "fa_icon": "fas fa-project-diagram"
-                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",

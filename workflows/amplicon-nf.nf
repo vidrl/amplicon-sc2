@@ -213,7 +213,7 @@ workflow AMPLICON_NF {
     }
 
 
-    SAMTOOLS_COVERAGE(ch_primertrimmed_bam, [[:], []], [[:], []])
+    SAMTOOLS_COVERAGE(ch_primertrimmed_bam, [[:], [], []])
 
     SAMTOOLS_DEPTH(ch_primertrimmed_bam, [[:], []])
 
