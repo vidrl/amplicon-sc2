@@ -282,6 +282,8 @@
               <th><strong>SNP Cluster</strong></th>
               <th><strong>Frame Shift</strong></th>
               <th><strong>Stop Codon</strong></th>
+              <th><strong>Pangolin Lineage</strong></th>
+              <th><strong>Pangolin QC Status</strong></th>
 
             </tr>
           </thead>
@@ -374,6 +376,18 @@
                 <span class="badge badge-fail">NA</span>
                 {% endif %}
                 {% if results.qc_stopcodon_count != "" %}<small>({{ results.qc_stopcodon_count }})</small>{% endif %}
+              </td>
+
+              <td> {{ results.p_lineage }} </td>
+              
+              <td>
+                {% if results.p_qc_status == "pass" %}
+                <span class="badge badge-pass">Pass</span>
+                {% elif results.p_qc_status == "fail" %}
+                <span class="badge badge-fail">Fail</span>
+                {% else %}
+                <span class="badge badge-fail">NA</span>
+                {% endif %}
               </td>
 
             </tr>

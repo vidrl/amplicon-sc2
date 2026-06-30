@@ -15,6 +15,7 @@ process GENERATE_RUN_REPORT {
       path(coverage_tsvs, stageAs: "coverage_tsvs/*"),
       path(msas, stageAs: "msas/*"),
       path(nextclade, stageAs: "nextclade_tsv/*"),
+      path(pangolin, stageAs: "pangolin_csv/*"),
       path(wfabed, stageAs: "wf-plots-bed.tsv"),
       path(wfasum, stageAs: "wf-plots-summary.tsv"),
       path(samplesheet_csv)

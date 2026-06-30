@@ -70,7 +70,7 @@
                     "fa_icon": "fas fa-project-diagram",
                     "default": "true"
                 },
-                "pangolin_dataset":{
+                "pangolin_update_dataset":{
                     "type": "string",
                     "title": "Pangolin dataset version.",
                     "description": "Version of the dataset to download. If not specified, Pangolin will retrieve the latest version.",

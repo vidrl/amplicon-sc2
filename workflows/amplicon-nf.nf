@@ -12,6 +12,7 @@ include { methodsDescriptionText                    } from '../subworkflows/loca
 include { ONT_ASSEMBLY                              } from '../subworkflows/local/ont_assembly/main'
 include { ILLUMINA_ASSEMBLY                         } from '../subworkflows/local/illumina_assembly/main'
 include { RUN_NEXTCLADE                             } from '../subworkflows/local/run_nextclade/main'
+include { RUN_PANGOLIN                              } from "../subworkflows/local/run_pangolin/main"
 
 include { SAMTOOLS_DEPTH                            } from '../modules/nf-core/samtools/depth/main'
 include { SAMTOOLS_COVERAGE                         } from '../modules/nf-core/samtools/coverage/main'
@@ -183,6 +184,18 @@ workflow AMPLICON_NF {
         }.groupTuple()
     }
 
+    if (params.pangolin) {
+        RUN_PANGOLIN(ch_reheadered_consensus_fasta)
+
+        ch_pangolin_csv = RUN_PANGOLIN.out
+            .map {meta, csv ->
+            [
+                meta.subMap("scheme", "custom_scheme", "custom_scheme_name"),
+                csv
+            ]
+        }.groupTuple()
+    }
+
     //
     // Generate report for each sample
     //
@@ -338,6 +351,7 @@ workflow AMPLICON_NF {
     ch_wf_artic_bed_opt = params.wf_artic_plots ? ch_wf_plots_bed_scheme : channel.empty()
     ch_wf_artic_summary_opt = params.wf_artic_plots ? ch_wf_plots_summary_scheme : channel.empty()
     ch_nextclade_opt  = params.nextclade ? ch_nextclade_tsv :  channel.empty()
+    ch_pangolin_opt  = params.pangolin ? ch_pangolin_csv :  channel.empty()
 
     ch_run_report_input = ch_bed_by_scheme
         // required
@@ -347,9 +361,10 @@ workflow AMPLICON_NF {
         // optional
         .join(ch_msas_opt, remainder: true)
         .join(ch_nextclade_opt, remainder: true)
+        .join(ch_pangolin_opt, remainder: true)
         .join(ch_wf_artic_bed_opt, remainder: true)
         .join(ch_wf_artic_summary_opt, remainder: true)
-        .map { meta, bed, depth, amp, cov, msas, nc, wfabed, wfasum ->
+        .map { meta, bed, depth, amp, cov, msas, nc, pg, wfabed, wfasum ->
             [
                 meta,
                 bed,
@@ -358,6 +373,7 @@ workflow AMPLICON_NF {
                 cov,
                 msas ?: [],
                 nc ?: [],
+                pg ?: [],
                 wfabed ?: [],
                 wfasum ?: [],
                 samplesheet_csv
