@@ -63,6 +63,19 @@
                     "description": "Version tag of the dataset to download. If not specified, Nextclade will retrieve the latest version.",
                     "fa_icon": "fas fa-project-diagram"
                 },
+                "pangolin": {
+                    "type": "boolean",
+                    "title": "Run Pangolin to assign",
+                    "description": "Run Pangolin for clade assignment on genome consensus sequence.",
+                    "fa_icon": "fas fa-project-diagram",
+                    "default": "true"
+                },
+                "pangolin_update_dataset":{
+                    "type": "string",
+                    "title": "Pangolin dataset version.",
+                    "description": "Version of the dataset to download. If not specified, Pangolin will retrieve the latest version.",
+                    "fa_icon": "fas fa-project-diagram"
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",

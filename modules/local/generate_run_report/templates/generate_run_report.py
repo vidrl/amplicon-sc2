@@ -1132,6 +1132,33 @@ for tsv in glob("nextclade_tsv/*.tsv"):
                 "qc_stopcodon_count": row.get("qc.stopCodons.totalStopCodons", ""),
             }
 
+# pangolin parsing tsv
+for file in glob("pangolin_csv/*.csv"):
+    with open(file, "r") as file:
+        for row in csv.DictReader(file, delimiter=","):
+            if sample_name not in payload["nextclade_table"]:
+                payload["nextclade_table"][sample_name] = {
+                    "p_lineage": "The sample was found pangolin.csv but not in nextclade. This is an error - it should never happen.",
+                }
+            else:
+                sample_name = row.get("taxon", "").split(" ")[0]
+                payload["nextclade_table"][sample_name].update(
+                    {
+                        "p_lineage": row.get("lineage", ""),
+                        "p_conflict": row.get("conflict", ""),
+                        "p_scorpio_call": row.get("scorpio_call", ""),
+                        "p_scorpio_support": row.get("scorpio_support", ""),
+                        "p_scorpio_conflict": row.get("scorpio_conflict", ""),
+                        "p_version": row.get("version", ""),
+                        "p_pangolin_version": row.get("pangolin_version", ""),
+                        "p_scorpio_version": row.get("scorpio_version", ""),
+                        "p_constellation_version": row.get("constellation_version", ""),
+                        "p_qc_status": row.get("qc_status", ""),
+                        "p_qc_notes": row.get("qc_notes", ""),
+                        "p_note": row.get("note", ""),
+                    }
+                )
+
 payload["nextclade_table"] = dict(
     sorted(
         payload["nextclade_table"].items(),
