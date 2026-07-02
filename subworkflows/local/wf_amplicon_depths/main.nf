@@ -11,7 +11,6 @@ workflow WF_AMPLICON_DEPTHS {
     window // val(20)
 
     main:
-    ch_versions = channel.empty()
 
     FASTCAT(ch_reads)
     fastcat_collected = FASTCAT.out.read
@@ -33,13 +32,7 @@ workflow WF_AMPLICON_DEPTHS {
         }.groupTuple()
     CONCAT_DEPTH(depth_collected, "tsv", "tsv")
 
-    ch_versions = ch_versions
-        .mix(FASTCAT.out.versions)
-        .mix(CONCAT_SUMMARY.out.versions)
-        .mix(POOLDEPTH.out.versions)
-
     emit:
     read_summary = CONCAT_SUMMARY.out.csv
     bed = CONCAT_DEPTH.out.csv
-    versions = ch_versions
 }
