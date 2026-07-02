@@ -15,7 +15,6 @@ process POOLDEPTH {
     output:
     tuple val(meta), path("${prefix}.depth.tsv"), emit: tsv
     tuple val("${task.process}"), val('pooldepth'), eval("csvtk version"), topic: versions, emit: versions_pooldepth
-    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -42,15 +41,9 @@ process POOLDEPTH {
     --out-file ${prefix}.${pools[1]}.depth.txt
 
     csvtk concat ${prefix}.${pools[0]}.depth.txt ${prefix}.${pools[1]}.depth.txt > ${prefix}.depth.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        mosdepth: \$(mosdepth --version 2>&1))
-    END_VERSIONS
     """
 
     stub:
-    def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
     """
     mkdir pool${pools[0]}
