@@ -228,7 +228,8 @@ def wf_coverage_plots(
         title = f"{sample}: {mean_depth:.0f}X, {pass_ratio:.1f}% > {threshold}X"
 
         # pool-1 area + line
-        p1 = df_sub[df_sub["pool"] == 1]
+        #downsample the data by 90%
+        p1 = df_sub[df_sub["pool"] == 1].iloc[::10]
         fig.add_trace(
             go.Scatter(
                 x=p1["pos"].tolist(),
@@ -236,7 +237,8 @@ def wf_coverage_plots(
                 mode="lines",
                 line=dict(color="#B5AEA7"),
                 showlegend=False,
-                hovertemplate="Position: %{x}<br>Pool-1: %{y}<extra></extra>",
+                #hovertemplate="Position: %{x}<br>Pool-1: %{y}<extra></extra>",
+                hoverinfo="skip",
             ),
             row=row,
             col=col,
@@ -256,7 +258,8 @@ def wf_coverage_plots(
         )
 
         # pool-2 area + line
-        p2 = df_sub[df_sub["pool"] == 2]
+        # similar downsampling
+        p2 = df_sub[df_sub["pool"] == 2].iloc[::10]
         fig.add_trace(
             go.Scatter(
                 x=p2["pos"].tolist(),
@@ -264,7 +267,8 @@ def wf_coverage_plots(
                 mode="lines",
                 line=dict(color="#54B8B1"),
                 showlegend=False,
-                hovertemplate="Position: %{x}<br>Pool-2: %{y}<extra></extra>",
+                #hovertemplate="Position: %{x}<br>Pool-2: %{y}<extra></extra>",
+                hovertemplate="skip",
             ),
             row=row,
             col=col,
