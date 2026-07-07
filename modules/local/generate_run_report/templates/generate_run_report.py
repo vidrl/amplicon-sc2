@@ -186,7 +186,7 @@ def wf_coverage_plots(
     #josh 20260706
 
     if nrows > 1:
-        max_spacing = 1 / (num_rows -1)
+        max_spacing = 1 / (nrows -1)
         dynamic_v_spacing = max_spacing * 0.8
     else:
         dynamic_v_spacing = 0.0
@@ -197,7 +197,7 @@ def wf_coverage_plots(
         dynamic_h_spacing = 0.0
 
     dynamic_height = max(600, nrows * 300)
-    dynamic_weight = max(500, ncols * 240)
+    dynamic_width = max(500, ncols * 240)
 
     fig = make_subplots(
         rows=nrows,
@@ -1303,7 +1303,7 @@ if coverage_data.exists():
         coverage_data,
         threshold=20,  # min depth - params.min_coverage_depth
         xlim=30000,  # size of genome
-        ylim=800,  # normalise depth x 2 - params.normalise_depth #may need to change to a smaller number
+        ylim=400,  # normalise depth x 2 - params.normalise_depth #may need to change to a smaller number
         ncols=3,  # how many columns per page
     )
 
