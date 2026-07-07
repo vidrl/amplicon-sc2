@@ -197,7 +197,7 @@ def wf_coverage_plots(
         dynamic_h_spacing = 0.0
 
     dynamic_height = max(600, nrows * 300)
-    dynamic_weight = max(500, ncols * 240)
+    dynamic_width = max(500, ncols * 240)
 
     fig = make_subplots(
         rows=nrows,
