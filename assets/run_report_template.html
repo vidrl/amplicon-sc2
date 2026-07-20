@@ -419,11 +419,13 @@
         <div style="display: flex; justify-content: center; height: 400px !important;"> {{ wf_summary_plots[0] | safe }} </div>
         <div style="display: flex; justify-content: center; height: 400px !important;"> {{ wf_summary_plots[1] | safe }} </div>
         <div style="display: flex; justify-content: center; height: 400px !important;"> {{ wf_summary_plots[2] | safe }} </div>
-        <div style="display: flex;justify-content: center; height: auto; min-height: 500px; overflow: visible; padding-bottom: 50px;">
-          <h2  style="text-align: center;">Per Pool Coverage Plots</h2>
-          <p></p>
-            {{ wf_cov_plots | safe }}
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 50px;">
+          <h3 style="text-align: center; margin-bottom: 20px;">Per Pool Coverage Plots</h3>
+          <div style="width: 100%; max-width: 1400px;justify-content: center; margin: 0 auto; overflow-x: auto;">
+              {{ wf_cov_plots | safe }}
+          </div>
         </div>
+      
       </div>
       {% endif %}
 

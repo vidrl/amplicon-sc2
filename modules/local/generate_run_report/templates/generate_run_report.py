@@ -51,17 +51,40 @@ def wf_summary_plots(fastcat_per_read_file):
         samples = df_in[sample_col].unique()
         fig = go.Figure()
         for s in samples:
+            # try to reduce the size of html report by pre-calculate the boxplot values
+            sub_df = df_in[df_in[sample_col]==s].copy()
+            q1 = sub_df[value_col].quantile(0.25)
+            median = sub_df[value_col].median()
+            q3 = sub_df[value_col].quantile(0.75)
+            lowerfence = sub_df[value_col].min()
+            upperfence = sub_df[value_col].max()
+        
             fig.add_trace(
+                #go.Box(
+                #    y=df_in.loc[df_in[sample_col] == s, value_col].tolist(),
+                #    name=s,
+                #    boxmean=False,
+                #    marker_color=color,
+                #    line_color="black",
+                #    line_width=1,
+                #    fillcolor=color,
+                #    showlegend=False,
+                #    hoverinfo="skip",
+                #)
                 go.Box(
-                    y=df_in.loc[df_in[sample_col] == s, value_col].tolist(),
+                    x=[s],
+                    q1 = [q1],
+                    median = [median],
+                    q3 = [q3],
+                    lowerfence = [lowerfence],
+                    upperfence = [upperfence],
                     name=s,
-                    boxmean=False,
                     marker_color=color,
                     line_color="black",
                     line_width=1,
                     fillcolor=color,
                     showlegend=False,
-                    hoverinfo="skip",
+                    hoverinfo="none",
                 )
             )
         fig.update_traces(boxpoints=False)
@@ -186,18 +209,18 @@ def wf_coverage_plots(
     #josh 20260706
 
     if nrows > 1:
-        max_spacing = 1 / (nrows -1)
-        dynamic_v_spacing = max_spacing * 0.8
+        max_spacing =1 / (nrows -1)
+        dynamic_v_spacing = max_spacing * 0.2
     else:
         dynamic_v_spacing = 0.0
 
     if ncols > 1:
-        dynamic_h_spacing = (1/ (ncols -1)) * 0.7
+        dynamic_h_spacing = (1/ (ncols -1)) * 0.2
     else:
         dynamic_h_spacing = 0.0
 
     dynamic_height = max(600, nrows * 300)
-    dynamic_width = max(500, ncols * 240)
+    dynamic_width = max(500, ncols * 400)
 
     fig = make_subplots(
         rows=nrows,
@@ -229,7 +252,8 @@ def wf_coverage_plots(
 
         # pool-1 area + line
         #downsample the data by 90%
-        p1 = df_sub[df_sub["pool"] == 1].iloc[::10]
+        #p1 = df_sub[df_sub["pool"] == 1].iloc[::10]
+        p1 = df_sub[df_sub["pool"] == 1]
         fig.add_trace(
             go.Scatter(
                 x=p1["pos"].tolist(),
@@ -238,7 +262,7 @@ def wf_coverage_plots(
                 line=dict(color="#B5AEA7"),
                 showlegend=False,
                 #hovertemplate="Position: %{x}<br>Pool-1: %{y}<extra></extra>",
-                hoverinfo="skip",
+                #hoverinfo="none",
             ),
             row=row,
             col=col,
@@ -251,15 +275,16 @@ def wf_coverage_plots(
                 fill="tozeroy",
                 fillcolor="#B5AEA7",
                 showlegend=False,
-                hoverinfo="skip",
+                hoverinfo="none",
             ),
             row=row,
             col=col,
         )
 
         # pool-2 area + line
-        # similar downsampling
-        p2 = df_sub[df_sub["pool"] == 2].iloc[::10]
+        ## similar downsampling
+        #no downsampling
+        p2 = df_sub[df_sub["pool"] == 2]
         fig.add_trace(
             go.Scatter(
                 x=p2["pos"].tolist(),
@@ -268,7 +293,7 @@ def wf_coverage_plots(
                 line=dict(color="#54B8B1"),
                 showlegend=False,
                 #hovertemplate="Position: %{x}<br>Pool-2: %{y}<extra></extra>",
-                hovertemplate="skip",
+                #hovertemplate="skip",
             ),
             row=row,
             col=col,
@@ -281,10 +306,13 @@ def wf_coverage_plots(
                 fill="tozeroy",
                 fillcolor="#54B8B1",
                 showlegend=False,
-                hoverinfo="skip",
+                hoverinfo="none",
             ),
             row=row,
             col=col,
+        )
+        fig.update_layout(
+            hovermode=False
         )
 
         fig.update_xaxes(range=[0, xlim], title="position", row=row, col=col)
@@ -293,7 +321,7 @@ def wf_coverage_plots(
         fig.layout.annotations[idx].text = title  # set subplot title
 
     #fig.update_layout(height=300 * nrows, width=250 * ncols)
-    fig.update_layout(height=dynamic_height, width=dynamic_width)
+    fig.update_layout(autosize=True, height=dynamic_height, width=dynamic_width)
 
     return pio.to_html(
         fig,
